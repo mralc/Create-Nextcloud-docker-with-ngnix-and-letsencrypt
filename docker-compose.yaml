@@ -1,0 +1,48 @@
+---
+version: "2"
+services:
+  nextcloud:
+    image: linuxserver/nextcloud
+    container_name: nextcloud
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London                                                                                                             
+    volumes:                                                                                                                         
+      - /opt/docker/data/nc/config/:/config                                                                                       
+      - /opt/docker/data/nc/data/:/data                                                                                           
+    ports:                                                                                                                           
+      - 444:443                                                                                                                      
+    restart: unless-stopped                                                                                                          
+                                                                                                                                     
+  db:                                                                                                                                
+    image: postgres:12.0-alpine                                                                                                      
+    container_name: nextcloud-postgres                                                                                               
+    environment:                                                                                                                     
+      POSTGRES_USER: nextclouduser                                                                                                   
+      POSTGRES_PASSWORD: changeme                                                                                              
+      POSTGRES_DB: nextcloud                                                                                                         
+      PGDATA: /var/lib/postgresql/data/pgdata                                                                                        
+    volumes:                                                                                                                         
+      - /opt/docker/data/db/:/var/lib/postgresql/data/pgdata                                                                   
+    ports:                                                                                                                           
+      - 5432:5432                                                                                                                    
+    restart: unless-stopped   
+
+  letsencrypt:
+    image: linuxserver/letsencrypt
+    container_name: letsencrypt
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - URL=hostnameofnc.net
+      - VALIDATION=http
+    volumes:
+      - /opt/docker/data/ngnixconfig/:/config
+    ports:
+      - 443:443
+      - 80:80 #optional
+    restart: unless-stopped 
