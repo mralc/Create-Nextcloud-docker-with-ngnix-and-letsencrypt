@@ -1,6 +1,6 @@
 # Setup Nextcloud using docker with ngnix and letsencrypt
 
-Tgit i
+This guide show you how to host your own nextcloud instances using docker and nginx as reverse proxy so that you can have a vaild letsencrpyt certifcate.
 
 First create a fresh install of Ubuntu 18.04 server, which has been fully updated, I am using a digital dropet with a public IP address.
 
